@@ -38,7 +38,7 @@
 Duplicating Objects:
 --------------------
 Q. What is the difference between shallow copy and deep copy?
-A. -> In Example6, a shallow copy would end up with 'a' on the new object as a copy of the value 2, but b, c, and d properties as just references to the same places as the references in the original object.
+A. -> In Example6, a shallow copy would end up with 'a' on the new object as a copy of the value 2, but b, c, and d properties are just references to the same places as the references in the original object.
 -> A deep copy would duplicate not only 'myObject', but 'anotherObject' and 'anotherArray'.
 -> But then we have issues that 'anotherArray' has references to 'anotherObject' and 'myObject' in it, so those should also be duplicated rather than reference-preserved. Now we have an infinite circular duplication problem because of the circular reference.
 
@@ -95,7 +95,7 @@ Immutability:
 -> When invoking [[Put]], how it behaves differs based on a number of factors, including (most impactfully) whether the property is already present on the object or not.
 -> If the property is present, the [[Put]] algorithm will roughly check:
     1. Is the property an accessor descriptor (see “Getters & Setters” section below)? If so, call the setter, if any.
-    2. Is the property a data descriptor with writable of false? If so, silently fail in non-strict mode, or throw TypeError in strict mode.
+    2. Is the property a data descriptor with writable of 'false'? If so, silently fail in non-strict mode, or throw TypeError in strict mode.
     3. Otherwise, set the value to the existing property as normal.
 Note: If the property is not yet present on the object in question, the [[Put]] operation is even more nuanced and complex.
 
@@ -107,7 +107,7 @@ Getters & Setters:
 -> Setters are properties which actually call a hidden function to set a value.
 -> When you define a property to have either a getter or a setter or both, its definition becomes an “accessor descriptor” (as opposed to a “data descriptor”).
 -> For accessor-descriptors, the value and writable characteristics of the descriptor are moot and ignored, and instead JS considers the set and get characteristics of the property (as well as configurable and enumerable).
--> In Example11 Part1, either through object-literal syntax with get a() { .. } or through explicit definition with defineProperty(..), in both cases we created a property on the object that actually doesn’t hold a value, but whose access automatically results in a hidden function call to the getter function, with whatever value it returns being the result of the property access.
+-> In Example11 Part1, either through get a(ough object-literal syntax wit) { .. } or through explicit definition with defineProperty(..), in both cases we created a property on the object that actually doesn’t hold a value, but whose access automatically results in a hidden function call to the getter function, with whatever value it returns being the result of the property access.
 -> In Example11 Part2:
     -> The 'in' operator will check to see if the property is in the object, or if it exists at any higher level of the [[Prototype]] chain object traversal.
     -> By contrast, hasOwnProperty(..) checks to see if only myObject has the property or not, and will not consult the [[Prototype]] chain.
@@ -128,7 +128,7 @@ Iteration:
 -> These special return values inside every(..) and some(..) act somewhat like a break statement inside a normal for loop, in that they stop the iteration early before it reaches the end.
 -> If you iterate on an object with a for..in loop, you’re also only getting at the values indirectly, because it’s actually iterating only over the enumerable properties of the object, leaving you to access the properties manually to get the values.
 Note: As contrasted with iterating over an array’s indices in a numerically ordered way (for loop or other iterators), the order of iteration over an object’s properties is not guaranteed and may vary between different JS engines. Do not rely on any observed ordering for anything that requires consistency among environments, as any observed agreement is unreliable.
-->  ES6 adds a for..of loop syntax for iterating over arrays (and objects, if the object defines its own custom iterator). See Example 13, Part2. 
+-> ES6 adds a for..of loop syntax for iterating over arrays (and objects, if the object defines its own custom iterator). See Example 13, Part2. 
     -> The for..of loop asks for an iterator object (from a default internal function known as @@iterator in spec-speak) of the thing to be iterated, and the loop then iterates over the successive return values from calling that iterator object’s next() method, once for each loop iteration.
     -> Arrays have a built-in @@iterator, so for..of works easily on them, as shown.
     -> While arrays do automatically iterate in for..of loops, regular objects do not have a built-in @@iterator.
