@@ -12,11 +12,9 @@ console.log(Object.prototype.toString.call(strObject)); // [object String]
 */
 
 /* Example2 
-// var strPrimitive = "I am a primitive string";
-// console.log(strPrimitive.length); // wrapper object
-// console.log(strPrimitive.charAt(3)); // Wrapper object
-
-var date = new Date();
+var strPrimitive = "I am a primitive string";
+console.log(strPrimitive.length);
+console.log(strPrimitive.charAt(3));
 */
 
 /* Example3
@@ -40,7 +38,7 @@ if (wantA) {
     idx = "a";
 }
 
-console.log(myObject[idx]); // myObject["a"];
+console.log(myObject[idx]); // 2
 */
 
 /* Example4
@@ -66,40 +64,37 @@ console.log(myObject["foobar"]);
 console.log(myObject["foobaz"]);
 */
 
-/* Example5
+/* Example5 
 var myArray = ["foo", 42, "bar"];
 
-console.log(myArray.length);
-console.log(myArray[0]);
-console.log(myArray[2]);
+console.log(myArray.length); //3
+console.log(myArray[0]); // foo
+console.log(myArray[2]); // bar
 
 myArray.baz = "baz";
-console.log(myArray.length);
-console.log(myArray.baz);
+console.log(myArray.length); // 3
+console.log(myArray.baz); // baz
 
-myArray["3"] = "baz";
-console.log(myArray.length);
-console.log(myArray[3]);
-console.log(myArray["3"]);
+myArray["3"] = "baz"; 
+console.log(myArray.length); // 4
+console.log(myArray[3]); // baz
+console.log(myArray["3"]); // baz
 */
 
-/* Example6 
-function anotherFunction() { } // 333
-// anotherFunction -> [function() {}] 
+/* Example6
+function anotherFunction() { } // 111
 
-var anotherObject = { // 111
+var anotherObject = { // 222
     c: true
 };
-// anotherObject -> [{ c: true }]
 
-var anotherArray = []; // 222
-// another Array -> [[]]
+var anotherArray = []; // 333
 
-var myObject = { // 444
-    a: 2,               // copy of value 2
-    b: anotherObject,	// reference, not a copy! (111)
-    c: anotherArray,	// another reference! (222)
-    d: anotherFunction  // 333
+var myObject = {
+    a: 2,
+    b: anotherObject,	// reference, not a copy! 
+    c: anotherArray,	// another reference!
+    d: anotherFunction
 };
 
 anotherArray.push(anotherObject, myObject);
@@ -107,7 +102,10 @@ anotherArray.push(anotherObject, myObject);
 // Solution1
 var sample = { a: 2 };
 var newObj = JSON.parse(JSON.stringify(sample));
-// var newObj = JSON.parse(JSON.stringify(myObject));
+// var newObj = JSON.parse(JSON.stringify(myObject)); // TypeError: cyclic object value
+
+var myObj = { a: 2, b: [] };
+var newObj = JSON.parse(JSON.stringify(myObj)); // { a: 2, b: [] }
 
 //Solution2
 var example = {};
@@ -142,12 +140,7 @@ newObj.b === anotherObject;		// true
 newObj.c === anotherArray;		// true
 newObj.d === anotherFunction;	// true
 
-var obj1 = {
-    a: 0,
-    b: {
-        c: 0
-    }
-};
+var obj1 = { a: 0, b: { c: 0 } };
 var obj2 = Object.assign({}, obj1);
 console.log(obj2); // { a: 0, b: { c: 0 } }
 
@@ -235,23 +228,23 @@ var myObject = {
 myObject.a = 3;
 console.log(myObject.a);					// 3
 
-Object.defineProperty(myObject, "a", {
-    value: 4,
-    writable: true,
-    configurable: false,	// not configurable!
-    enumerable: true
-});
+// Object.defineProperty(myObject, "a", {
+//     value: 4,
+//     writable: true,
+//     configurable: false,	// not configurable!
+//     enumerable: true
+// });
 
 myObject.a;					// 4
 myObject.a = 5;
 console.log(myObject.a);					// 5
 
-Object.defineProperty(myObject, "a", {
-    value: 6,
-    writable: true,
-    configurable: true,
-    enumerable: true
-}); // TypeError: can't redefine non-configurable property "a"
+// Object.defineProperty(myObject, "a", {
+//     value: 6,
+//     writable: true,
+//     configurable: true,
+//     enumerable: true
+// }); // TypeError: can't redefine non-configurable property "a"
 
 
 // Note: There’s a nuanced exception to be aware of: even if the property is already configurable:false, writable can always be changed from true to false without error, but not back to true if already false.
@@ -262,12 +255,12 @@ Object.defineProperty(myObject, "a", {
     enumerable: true
 });
 
-Object.defineProperty(myObject, "a", {
-    value: 6,
-    writable: true,
-    configurable: false,
-    enumerable: true
-}); // can't redefine non-configurable property "a"
+// Object.defineProperty(myObject, "a", {
+//     value: 6,
+//     writable: true,
+//     configurable: false,
+//     enumerable: true
+// }); // can't redefine non-configurable property "a"
 
 // Another thing configurable:false prevents the ability to use the delete operator to remove an existing property.
 // delete is just an object property removal operation – nothing more.
@@ -277,9 +270,9 @@ var myObject = {
     a: 2
 };
 
-console.log(myObject.a);				// 2
+myObject.a;				// 2
 delete myObject.a;
-console.log(myObject.a);				// undefined
+myObject.a;				// undefined
 
 Object.defineProperty(myObject, "a", {
     value: 2,
@@ -288,9 +281,9 @@ Object.defineProperty(myObject, "a", {
     enumerable: true
 });
 
-console.log(myObject.a);				// 2
+myObject.a;				// 2
 delete myObject.a;
-console.log(myObject.a);				// 2
+myObject.a;				// 2
 */
 
 /* Example8
@@ -316,12 +309,16 @@ myObject.b; // undefined
 // Note: In non-strict mode, the creation of b fails silently. In strict mode, it throws a TypeError.
 */
 
-/* Example10
+/* Example10 
 var myObject = {
-    a: 2 
+    a: 2
 };
 
 console.log(myObject.a); // 2
+
+var myObject = {
+    a: 2
+};
 
 console.log(myObject.b); // undefined
 */
@@ -378,14 +375,6 @@ console.log("b" in myObject); // false
 
 console.log(myObject.hasOwnProperty("a")); // true
 console.log(myObject.hasOwnProperty("b")); // false
-
-var newObj = Object.create(null);
-console.log(newObj);
-// console.log(newObj.hasOwnProperty("a"));
-console.log(Object.prototype.hasOwnProperty.call(newObj, "a"));
-
-var arr = [2, 4, 6];
-console.log(4 in arr);
 */
 
 /* Example12
@@ -405,9 +394,9 @@ Object.defineProperty(
     { enumerable: false, value: 4 }
 );
 
-console.log(myObject.b); // 4
-console.log("b" in myObject); // true
-console.log(myObject.hasOwnProperty("b")); // true
+console.log(myObject.b);
+console.log("b" in myObject);
+console.log(myObject.hasOwnProperty("b"));
 
 for (var k in myObject) { // 'b' doesn’t show up in a for..in loop 
     console.log(k, myObject[k]); // a 2
@@ -440,30 +429,26 @@ console.log(Object.keys(myObject)); // ["a"]
 console.log(Object.getOwnPropertyNames(myObject)); // ["a", "b"]
 */
 
-/* Example13
+/* Example13 
 // Part1
 var myArray = [1, 2, 3];
 
 for (var i = 0; i < myArray.length; i++) {
-	console.log( myArray[i] );
+    console.log(myArray[i]);
 }
 // 1 2 3
 
-var values = myArray.forEach(function cb(el) {
-    return el * 2;
-});
-
 // Part2
-var myArray = [ 1, 2, 3 ];
+var myArray = [1, 2, 3];
 
 for (var v of myArray) {
-	console.log( v );
+    console.log(v);
 }
 // 1
 // 2
 // 3
 
-var myArray = [ 1, 2, 3 ];
+var myArray = [1, 2, 3];
 var it = myArray[Symbol.iterator]();
 
 console.log(it.next()); // { value: 1, done: false }
@@ -475,7 +460,7 @@ console.log(it.next()); // { value: undefined, done: true }
 
 // Define @@iterator in object
 var myObject = {
-    a: 2, 
+    a: 2,
     b: 4
 };
 
@@ -486,13 +471,13 @@ Object.defineProperty(
         enumerable: false,
         writable: false,
         configurable: true,
-        value: function() { // @@iterator
+        value: function () {
             var o = this;
             var idx = 0;
-            var ks = Object.keys(o); // ['a', 'b']
-            
-            return { // it
-                next: function() {
+            var ks = Object.keys(o);
+
+            return {
+                next: function () {
                     return {
                         value: o[ks[idx++]],
                         done: (idx > ks.length)
@@ -510,6 +495,6 @@ console.log(it.next());
 console.log(it.next());
 
 for (var v of myObject) {
-	console.log( v );
+    console.log(v);
 }
 */
